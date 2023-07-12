@@ -1,7 +1,7 @@
 <?php
 define('SCAN_DIR', ''); // Replace with your folder with ioncube files.
 define('DIR_BACKUP', SCAN_DIR."_backup");
-define('COOKIE', ''); // Replace with your easytoyou.eu cookies.
+define('COOKIE', ''); // Replace with your easytoyou.eu cookies. Open Browser Console, and type: console.log(document.cookie), and paste the string here =)
 
 if (!is_file('composer.json')) {
     file_put_contents('composer.json', base64_decode("ewogICAgInJlcXVpcmUiOiB7CiAgICAgICAgInBocCI6ICI+PTcuMiIsCiAgICAgICAgImd1enpsZWh0dHAvZ3V6emxlIjogIl43LjciLAogICAgICAgICJ2b2t1L3NpbXBsZV9odG1sX2RvbSI6ICJeNC44IgogICAgfQp9Cg=="));
