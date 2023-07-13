@@ -1,7 +1,10 @@
 <?php
-define('SCAN_DIR', ''); // Replace with your folder with ioncube files.
+// Replace with your folder with ioncube files.
+define('SCAN_DIR', ''); // SitiosWeb/pscloud/clientes
 define('DIR_BACKUP', SCAN_DIR."_backup");
-define('COOKIE', ''); // Replace with your easytoyou.eu cookies. Open Browser Console, and type: console.log(document.cookie), and paste the string here =)
+
+// Replace with your easytoyou.eu cookies. Open Browser Console, and type: console.log(document.cookie), and paste the string here =)
+define('COOKIE', '');
 
 if (!is_file('composer.json')) {
     file_put_contents('composer.json', base64_decode("ewogICAgInJlcXVpcmUiOiB7CiAgICAgICAgInBocCI6ICI+PTcuMiIsCiAgICAgICAgImd1enpsZWh0dHAvZ3V6emxlIjogIl43LjciLAogICAgICAgICJ2b2t1L3NpbXBsZV9odG1sX2RvbSI6ICJeNC44IgogICAgfQp9Cg=="));
@@ -13,18 +16,23 @@ if (!is_file('functions.php')) {
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/functions.php';
 
+
 if (!is_dir(SCAN_DIR)) {
     prints("Directory not found: " . SCAN_DIR);
     exit;
 }
 
+$search = [
+    "extension_loaded('ionCube Loader'))",
+    "echo(\"Site error: the \".(php_sapi_name()=='cli'?'ionCube':",
+];
 foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(SCAN_DIR)) as $file) {
-    if (strpos($file, 'vendor') !== false && strpos($file, DIR_BACKUP) !== false) {
+    if ( strpos($file, DIR_BACKUP) !== false) {
         continue;
     }
     if ($file->isFile() && $file->getExtension() === 'php') {
         $content = file_get_contents($file);
-        if (strpos($content, "extension_loaded('ionCube Loader'))") !== false) {
+        if (preg_match('/' . implode('|', array_map('preg_quote', $search)) . '/', $content)) {
             prints("Decoding file: $file");
             $filePath = $file->getRealPath();
             ioncubeDecode($filePath);
